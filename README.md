@@ -6,128 +6,123 @@ This project provides an implementation of AES encryption and decryption using t
 
 ## Features
 
-- **AES Encryption & Decryption**: Secure encryption using AES algorithm in GCM mode.
-- **Keystore Integration**: Supports key generation and storage in the Android Keystore system.
-- **Manual Key Management**: Allows using a manually provided Base64 encoded key for encryption and decryption.
-- **Easy-to-use API**: Simple methods for encrypting and decrypting text data.
+- 🔐 AES Encryption & Decryption using GCM mode
+- 🔑 Android Keystore integration
+- 🧰 Manual key support (Base64 encoded)
+- 💡 Simple and developer-friendly API
 
-## Prerequisites
+---
 
-- Android 6.0 (API level 23) or higher.
-- Android Studio with the latest stable version.
+## 📦 Import via JitPack
 
-## Setup
+To include this library in your project via [JitPack](https://jitpack.io), follow these steps:
 
-### 1. Add the necessary dependencies
+### 1. Add JitPack repository to your `settings.gradle` (project-level):
 
-Make sure to add the following dependencies in your `build.gradle` file:
+```kotlin
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        maven { url = uri("https://jitpack.io") }
+    }
+}
+````
 
-gradle
+### 2. Add the dependency in your app/module `build.gradle`:
+
+```kotlin
+dependencies {
+    implementation("com.github.mat-in:AES-GCM_Android:v1.0.0")
+}
 ```
+
+---
+
+## 🛠️ Setup
+
+### Dependencies
+
+Add these (if not already present):
+
+```gradle
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.core:core-ktx:1.5.0'
 }
-````
+```
 
-### 2. Key Generation and Encryption
+---
 
-There are two ways to use this library for encryption/decryption: using the Android Keystore or using a manually generated key.
+## 🔑 Using the Keystore
 
-### Using Keystore for Key Management:
-
-The AES encryption key can be generated and stored securely in the Android Keystore.
-
-#### Key Generation:
-
-Use the following method to generate a key and store it securely in the Keystore:
+### 1. Create a secure key
 
 ```kotlin
 AesGcm.createKeystoreKey("secure_alias")
 ```
 
-#### Encrypting and Decrypting Data:
-
-Once the key is stored in the Keystore, you can easily encrypt and decrypt data using the following methods:
+### 2. Encrypt & decrypt
 
 ```kotlin
-// Create an AES instance using the Keystore key
 val aes = AesGcm.fromKeystore("secure_alias")
-
-// Encrypt data
 val encrypted = aes.encrypt("Secret Message")
-
-// Decrypt data
 val decrypted = aes.decrypt(encrypted)
 ```
 
-### Using a Manual Key:
+---
 
-If you want to use a manually created AES key (encoded in Base64), you can do so with the following methods.
+## 🧪 Using a Manual Key
 
-#### Generate a Base64 Encoded Key:
-
-To generate a key and encode it in Base64 format:
+### 1. Generate Base64 Key
 
 ```kotlin
-val base64Key = AesGcm.generateBase64Key() // You can specify the key size (default: 256)
+val base64Key = AesGcm.generateBase64Key()
 ```
 
-#### Encrypting and Decrypting Data:
+### 2. Encrypt & Decrypt
 
-Use the following methods to encrypt and decrypt with the manually provided key:
-
-```
-// Create an AES instance using the Base64 key
+```kotlin
 val aes = AesGcm.fromBase64Key(base64Key)
-
-// Encrypt data
 val encrypted = aes.encrypt("Secret Message")
-
-// Decrypt data
 val decrypted = aes.decrypt(encrypted)
 ```
 
-## Code Explanation
+---
 
-### AesGcm Class:
+## 📘 Code Explanation
 
-The `AesGcm` class is the core of this implementation. It provides methods for:
+### Main API: `AesGcm`
 
-* **Encryption**: The `encrypt()` method encrypts plaintext using AES in GCM mode.
-* **Decryption**: The `decrypt()` method decrypts ciphertext.
-* **Key Management**: Keys can be stored securely in the Android Keystore or manually provided in Base64 format.
+* `encrypt(text: String)`: Returns encrypted text (Base64-encoded)
+* `decrypt(text: String)`: Returns original decrypted text
 
-### Companion Object Methods:
+### Companion Methods
 
-* **`fromKeystore(alias: String)`**: Initializes the AES encryption/decryption using a key stored in the Android Keystore.
-* **`fromBase64Key(base64Key: String)`**: Initializes AES encryption/decryption using a manually provided Base64 key.
-* **`generateBase64Key(keySize: Int)`**: Generates and returns a Base64 encoded AES key.
-* **`createKeystoreKey(alias: String, keySize: Int)`**: Creates and stores a key in the Android Keystore for encryption and decryption.
+* `createKeystoreKey(alias: String)`
+* `fromKeystore(alias: String)`
+* `generateBase64Key(size: Int = 256)`
+* `fromBase64Key(key: String)`
 
-### KeyWrapper Class:
+### Internal: `KeyWrapper`
 
-The `KeyWrapper` class is used internally to differentiate between keys stored in the Keystore and manually provided keys.
+Used to wrap either a Keystore-based or manually supplied `SecretKey`.
 
-## Example
+---
 
-Here’s a complete example of how to use this library:
+## ▶️ Example Usage
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
-    lateinit var aes: AesGcm
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Step 1: Create the key in the Android Keystore
         AesGcm.createKeystoreKey("secure_alias")
 
-        // Step 2: Create an encryptor using that alias
         val aes = AesGcm.fromKeystore("secure_alias")
-
-        // Step 3: Encrypt and decrypt data
         val encrypted = aes.encrypt("Secret Message")
         val decrypted = aes.decrypt(encrypted)
 
@@ -137,21 +132,28 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-## Testing
+---
 
-Test the encryption and decryption by logging the encrypted and decrypted values. Ensure that the decrypted message matches the original plaintext.
+## ✅ Testing
 
-## Contributing
-
-If you want to contribute to this project, feel free to open a pull request with your changes. Please ensure that all code is well-documented and tests are added for new features.
+Ensure encrypted values differ each time due to random IVs. The decrypted output should match the original input.
 
 ---
 
-### Notes
+## 🤝 Contributing
 
-* **Security Consideration**: Always use secure channels for sharing encrypted data, and never expose encryption keys in your app's source code or commit them to version control.
+Pull requests are welcome! Please include tests and documentation for new features.
 
-```
+---
 
-This README covers all aspects of the library, including setup, usage, code explanations, and an example. You can easily extend it by adding more details, tests, or configuration options as you continue developing your library.
-```
+## ⚠️ Notes
+
+* Do **not** hardcode keys in production apps.
+* Do **not** commit generated keys to version control.
+* Always keep your app and libraries updated for security.
+
+---
+
+## 📄 License
+
+MIT © [mat-in](https://github.com/mat-in)
