@@ -1,5 +1,5 @@
 
-````
+
 # AES GCM Encryption and Decryption for Android
 
 This project provides an implementation of AES encryption and decryption using the GCM (Galois/Counter Mode) mode of operation for secure data handling in Android applications. It allows you to securely encrypt and decrypt data either using a key stored in the Android Keystore or a manually provided key.
@@ -22,7 +22,8 @@ This project provides an implementation of AES encryption and decryption using t
 
 Make sure to add the following dependencies in your `build.gradle` file:
 
-```gradle
+gradle
+```
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.core:core-ktx:1.5.0'
@@ -76,7 +77,7 @@ val base64Key = AesGcm.generateBase64Key() // You can specify the key size (defa
 
 Use the following methods to encrypt and decrypt with the manually provided key:
 
-```kotlin
+```
 // Create an AES instance using the Base64 key
 val aes = AesGcm.fromBase64Key(base64Key)
 
